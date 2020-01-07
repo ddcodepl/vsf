@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  vue:
+    container_name: vue-safe
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '8888:8080'
+      - '8899:80'
