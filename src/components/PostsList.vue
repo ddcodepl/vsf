@@ -78,7 +78,7 @@ export default {
                 ? this.getPosts.filter(post => post.userId === newVal)
                 : this.getPosts
 
-            this.order()
+            this.sort()
         },
         order() {
             this.sort()
