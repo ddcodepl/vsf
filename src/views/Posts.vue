@@ -37,32 +37,23 @@ export default {
     },
     methods: {
         ...mapMutations(['setAuthors', 'setPosts']),
-        init() {
-            this.getData()
+        async init() {
+            await this.getData()
+            this.dataLoaded = true
+
+            setInterval(this.getData(), 10000)
         },
         async getData() {
-            const url = `https://jsonplaceholder.typicode.com/posts`
+            const urlPosts = `https://jsonplaceholder.typicode.com/posts`
+            const urlAuthors = `https://jsonplaceholder.typicode.com/users`
 
-            await fetch(url)
-                .then(response => response.json())
-                .then(json => {
-                    if (json.join('') !== this.getPosts.join('')) {
-                        this.setPosts(json)
-                    }
-                })
+            const [posts, authors] = await Promise.all([
+                fetch(urlPosts).then(response => response.json()),
+                fetch(urlAuthors).then(response => response.json()),
+            ])
 
-            await this.getAuthors()
-        },
-        getAuthors() {
-            const url = `https://jsonplaceholder.typicode.com/users`
-
-            fetch(url)
-                .then(response => response.json())
-                .then(json => {
-                    this.setAuthors(json)
-
-                    this.dataLoaded = true
-                })
+            this.setPosts(posts)
+            this.setAuthors(authors)
         },
         updateAuthor(value) {
             this.author = value
@@ -72,6 +63,7 @@ export default {
         },
         updateListLength(item) {
             this.page = 1
+
             this.totalLength = Math.ceil(item.length / item.itemsPerPage)
         },
     },
@@ -80,8 +72,6 @@ export default {
     },
     mounted() {
         this.init()
-
-        setInterval(this.getData, 10000)
     },
 }
 </script>

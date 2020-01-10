@@ -41,7 +41,7 @@ export default {
         list: [],
     }),
     methods: {
-        async init() {
+        init() {
             this.list = this.getPosts
         },
         sort() {
@@ -74,13 +74,11 @@ export default {
             }
         },
         filter(newVal) {
-            if (newVal) {
-                this.list = this.getPosts.filter(post => post.userId === newVal)
-            } else {
-                this.list = this.getPosts
-            }
+            this.list = newVal
+                ? this.getPosts.filter(post => post.userId === newVal)
+                : this.getPosts
 
-            this.sort()
+            this.order()
         },
         order() {
             this.sort()
